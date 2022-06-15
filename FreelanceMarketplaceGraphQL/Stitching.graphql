@@ -1,0 +1,57 @@
+﻿extend type Query{
+	buyers: [Buyer] @delegate(schema: "profiles", path: "buyers")
+	freelancers: [Freelancer] @delegate(schema: "profiles", path: "freelancers")
+	catalogs: [Catalog] @delegate(schema: "catalogs", path: "catalogs")
+	orders: [Order] @delegate(schema: "orders", path: "orders")
+	freelancerSkills: [FreelancerSkill] @delegate(schema: "profiles", path: "freelancerSkills")
+}
+
+extend type Buyer{
+	catalogsByBuyer: [Catalog]
+	@delegate(
+		schema: "catalogs"
+		path: "catalogsByBuyer(buyerId: $fields: id)"
+
+	)
+
+	buyersAndCatalogs: [Catalog]
+	@delegate(
+		schema: "catalogs"
+		path: "buyersAndCatalogs(buyerId: $fields: id)"
+	)
+}
+
+extend type Order{
+	ordersAndCatalogs: Catalog 
+	@delegate(
+		schema: "catalogs"
+		path: "ordersAndCatalogs(catalogId: $fields: catalogId)"
+	)
+
+	catalogByOrder: Catalog
+	@delegate(
+		schema: "catalogs"
+		path: "catalogByOrder(catalogId: $fields: catalogId)"
+	)
+
+	ordersAndFreelancers: Freelancer
+	@delegate(
+		schema: "profiles"
+		path: "ordersAndFreelancers(freelancerId: $fields: freelancerId)"
+	)
+
+	freelancerByOrder: Freelancer
+	@delegate(
+		schema: "profiles"
+		path: "freelancerByOrder(freelancerId: $fields: freelancerId)"
+	)
+}
+
+extend type Mutation{
+	addBuyer(input: [AddBuyerInput]): [AddBuyerPayload] @delegate(schema: "profiles")
+	addFreelancer(input: [AddFreelancerInput]): [AddFreelancerPayload] @delegate(schema: "profiles")
+	addCatalog(input: [AddCatalogInput]): [AddCatalogPayload] @delegate(schema: "catalogs")
+	addOrder(input: [AddOrderInput]): [AddOrderPayload] @delegate(schema: "orders")
+	simpleLogin(input: [AddLoginInput]): [String] @delegate(schema: "profiles")
+	putBuyer(id: [UUID], input: [AddBuyerInput]): [AddBuyerPayload] @delegate(schema: "profiles")
+}
