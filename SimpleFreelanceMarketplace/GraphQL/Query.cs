@@ -34,12 +34,12 @@ namespace CatalogService.GraphQL
             return catalogRepository.GetCatalogsByBuyer(buyerId);
         }
 
-        /* [UseFiltering]
+        [UseFiltering]
         [UseSorting]
         public Catalog GetCatalogByOrder([Service] CatalogRepository catalogRepository, Guid catalogId)
         {
             return catalogRepository.GetCatalogByOrder(catalogId);
-        } */
+        }
 
         // With CatalogsByBuyerDataLoader
         /* [UseFiltering]
